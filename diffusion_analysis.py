@@ -87,29 +87,29 @@ def diffusion_scores(df_scores, MF):
         # ax.spines['top'].set_visible(False)
         # ax.spines['right'].set_visible(False)
         #
-        # distS = []
-        # for mark_ind, data in enumerate(norm_MM):
-        #     AM_x = int(np.mean(norm_MM[str(mark_ind)]['x']))
-        #     AM_y = int(np.mean(norm_MM[str(mark_ind)]['y']))
-        #     dist, index = tree.query((AM_x, AM_y))
-        #
-        #     if cellMask_bw_all[AM_x, AM_y] == 1:
-        #         fact = -1
-        #     else:
-        #         fact = 1
-        #     xval = dist*fact*pix_size
-        #     mark_intensities = mol_int[int(mark_ind)]
-        #
-        #     plt.scatter(xval[mark_intensities>0], mark_intensities[mark_intensities>0] , 10, 'k', alpha=0.5)
-        #
-        #     distS = np.append(distS, xval)
-        #
-        # distS = np.clip(distS, np.percentile(distS, 1), np.percentile(distS, 99))
-        #
-        # score = np.median(distS[mol_int>0])
-        # df_scores.loc[i, '{}_score'.format(ds_name[-12:])] = score
-        # df_scores.loc[i, '{}_mean_I'.format(ds_name[-12:])] = np.mean(mol_int)
-        # df_scores.loc[i, '{}_mean_I_no0'.format(ds_name[-12:])] = np.mean(mol_int[mol_int>0])
+        distS = []
+        for mark_ind, data in enumerate(norm_MM):
+            AM_x = int(np.mean(norm_MM[str(mark_ind)]['x']))
+            AM_y = int(np.mean(norm_MM[str(mark_ind)]['y']))
+            dist, index = tree.query((AM_x, AM_y))
+        
+            if cellMask_bw_all[AM_x, AM_y] == 1:
+                fact = -1
+            else:
+                fact = 1
+            xval = dist*fact*pix_size
+            mark_intensities = mol_int[int(mark_ind)]
+        
+            plt.scatter(xval[mark_intensities>0], mark_intensities[mark_intensities>0] , 10, 'k', alpha=0.5)
+        
+            distS = np.append(distS, xval)
+        
+        distS = np.clip(distS, np.percentile(distS, 1), np.percentile(distS, 99))
+        
+        score = np.median(distS[mol_int>0])
+        df_scores.loc[i, '{}_score'.format(ds_name[-12:])] = score
+        df_scores.loc[i, '{}_mean_I'.format(ds_name[-12:])] = np.mean(mol_int)
+        df_scores.loc[i, '{}_mean_I_no0'.format(ds_name[-12:])] = np.mean(mol_int[mol_int>0])
         #
         # plt.axvline(x=0, color=[1,0,0], linewidth=3)
         # plt.title('{}, {}'.format(mol_name, '%.2f' %score), fontsize=15)
